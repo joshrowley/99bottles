@@ -1,73 +1,26 @@
-class CountPresenter
-  attr_reader :count
-
-  def initialize(count)
-    @count = count
-  end
-
-  def next_count
-    count - 1
-  end
-
-  def count_noun
-    count == 1 ? 'bottle' : 'bottles'
-  end
-
-  def next_count_noun
-    next_count == 1 ? 'bottle' : 'bottles'
-  end
-
-  def count_and_noun
-    "#{count} #{count_noun}"
-  end
-
-  def next_count_and_noun
-    "#{next_count} #{next_count_noun}"
-  end
-
-  def end_phrase
-    count == 1 ? 'no more bottles' : "#{next_count} #{next_count_noun}"
-  end
-
-  def take_noun
-    count == 1 ? 'it' : 'one'
-  end
-end
-
 class Bottles
-  def verse(count)
-    return ending if count == 0
-
-    presenter = CountPresenter.new(count)
-
-    <<-VERSE
-#{presenter.count_and_noun} of beer on the wall, #{presenter.count_and_noun} of beer.
-Take #{presenter.take_noun} down and pass it around, #{presenter.end_phrase} of beer on the wall.
-    VERSE
+  def verse(number)
+    case number
+    when 2
+      "2 bottles of beer on the wall, 2 bottles of beer.\n" +
+      "Take one down and pass it around, 1 bottle of beer on the wall.\n"
+    when 1
+      "1 bottle of beer on the wall, 1 bottle of beer.\n" +
+      "Take it down and pass it around, no more bottles of beer on the wall.\n"
+    when 0
+      "No more bottles of beer on the wall, no more bottles of beer.\n" +
+      "Go to the store and buy some more, 99 bottles of beer on the wall.\n"
+    else
+      "#{number} bottles of beer on the wall, #{number} bottles of beer.\n" + 
+      "Take one down and pass it around, #{number - 1} bottles of beer on the wall.\n"
+    end
   end
 
-  def verses(beginning, end_count)
-    verses = []
-    while beginning >= end_count
-      verses << verse(beginning)
-      beginning -= 1
-    end
-
-    verses.join("\n")
+  def verses(start, finish)
+    start.downto(finish).map { |n| verse(n) }.join("\n")
   end
 
   def song
     verses(99, 0)
-  end
-
-  def take_noun(count)
-    count == 1 ? 'it' : 'one'
-  end
-
-  def ending
-    <<-VERSE
-No more bottles of beer on the wall, no more bottles of beer.
-Go to the store and buy some more, 99 bottles of beer on the wall.
-    VERSE
   end
 end
